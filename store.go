@@ -5,6 +5,8 @@ import "sync"
 type Storage interface {
 	Add(feature *Feature) error
 
+	Update(feature *Feature) error
+
 	Find(featureName string) (*Feature, error)
 
 	Exists(featureName string) (bool, error)
@@ -22,6 +24,13 @@ func NewInMemoryStorage() Storage {
 }
 
 func (m *inmemoryStore) Add(feature *Feature) error {
+	m.mu.Lock()
+	defer m.mu.Unlock()
+	m.features[string(feature.Name)] = feature
+	return nil
+}
+
+func (m *inmemoryStore) Update(feature *Feature) error {
 	m.mu.Lock()
 	defer m.mu.Unlock()
 	m.features[string(feature.Name)] = feature

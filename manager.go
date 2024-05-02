@@ -44,7 +44,7 @@ func (sfm *simpleFeatureManager) Enable(ctx context.Context, featureName string)
 		return err
 	}
 	feature.IsEnabled = true
-	sfm.Store().Add(feature)
+	sfm.Store().Update(feature)
 	return nil
 }
 
@@ -54,7 +54,7 @@ func (sfm *simpleFeatureManager) Disable(ctx context.Context, featureName string
 		return err
 	}
 	feature.IsEnabled = false
-	sfm.Store().Add(feature)
+	sfm.Store().Update(feature)
 	return nil
 }
 
