@@ -3,14 +3,6 @@ package fitcha
 import "context"
 
 type FeatureManager interface {
-	// IsEnabled(context.Context, string) (bool, error)
-
-	// Disable(context.Context, string) error
-
-	// Enable(context.Context, string) error
-
-	// AddCondition(context.Context, string, string) error
-
 	Store() Storage
 
 	Evaluate(context.Context, string) (bool, error)
@@ -18,6 +10,8 @@ type FeatureManager interface {
 	EvaluateExpr(context.Context, string, string) (bool, error)
 
 	IsEnabled(context.Context, string) (bool, error)
+
+	Enable(context.Context, string) error
 
 	Disable(context.Context, string) error
 }
@@ -42,6 +36,16 @@ func (sfm *simpleFeatureManager) IsEnabled(ctx context.Context, featureName stri
 		return false, ErrFeatureIsNotEnabled
 	}
 	return true, nil
+}
+
+func (sfm *simpleFeatureManager) Enable(ctx context.Context, featureName string) error {
+	feature, err := sfm.Store().Find(featureName)
+	if err != nil {
+		return err
+	}
+	feature.IsEnabled = true
+	sfm.Store().Add(feature)
+	return nil
 }
 
 func (sfm *simpleFeatureManager) Disable(ctx context.Context, featureName string) error {

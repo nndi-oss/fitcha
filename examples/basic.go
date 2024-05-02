@@ -56,4 +56,14 @@ func main() {
 	if !ok {
 		fmt.Println("FEATURE is disabled")
 	}
+
+	err = featureManager.Enable(ctx, "test")
+	if err != nil {
+		panic(err)
+	}
+
+	ok, _ = featureManager.IsEnabled(ctx, "test")
+	if ok {
+		fmt.Println("FEATURE is enabled")
+	}
 }
