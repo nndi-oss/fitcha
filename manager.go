@@ -63,7 +63,7 @@ func (sfm *simpleFeatureManager) Evaluate(ctx context.Context, featureName strin
 	if !feature.IsEnabled {
 		return false, ErrFeatureIsNotEnabled
 	}
-	return evaluateCondition(ctx, feature.Expr), nil
+	return sfm.EvaluateExpr(ctx, featureName, feature.Expr)
 }
 
 func (sfm *simpleFeatureManager) EvaluateExpr(ctx context.Context, featureName string, cond string) (bool, error) {
@@ -74,5 +74,5 @@ func (sfm *simpleFeatureManager) EvaluateExpr(ctx context.Context, featureName s
 	if cond == "" {
 		return false, ErrEmptyExpression
 	}
-	return evaluateCondition(ctx, cond), nil
+	return evaluateCondition(ctx, cond)
 }
