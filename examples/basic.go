@@ -20,9 +20,7 @@ func main() {
 		"roles": []string{"typist"},
 		"age":   21,
 	})
-
 	featureManager := fitcha.NewFeatureManager(fitcha.NewInMemoryStorage())
-
 	featureManager.Store().Add(&newFeature)
 
 	// check if the feature is enabled..

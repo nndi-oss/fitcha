@@ -10,10 +10,10 @@ import (
 func evaluateCondition(ctx context.Context, condition string) (bool, error) {
 	env := make(map[string]any)
 
-	env["fitcha.user"] = ctx.Value(fitchaUserKey)
-	env["fitcha.org"] = ctx.Value(fitchaOrgKey)
+	env["fitcha.user"] = ctx.Value(UserCtx)
+	env["fitcha.org"] = ctx.Value(OrgCtx)
 
-	data := ctx.Value(fitchaExtraKey)
+	data := ctx.Value(ExtraCtx)
 	if data != nil {
 		dataMap := data.(map[string]any)
 		for key, val := range dataMap {
