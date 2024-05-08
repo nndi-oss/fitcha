@@ -59,7 +59,10 @@ func (sfm *simpleFeatureManager) Disable(ctx context.Context, featureName string
 }
 
 func (sfm *simpleFeatureManager) Evaluate(ctx context.Context, featureName string) (bool, error) {
-	feature, _ := sfm.Store().Find(featureName)
+	feature, err := sfm.Store().Find(featureName)
+	if err != nil {
+		return false, err
+	}
 	if !feature.IsEnabled {
 		return false, ErrFeatureIsNotEnabled
 	}
@@ -67,10 +70,15 @@ func (sfm *simpleFeatureManager) Evaluate(ctx context.Context, featureName strin
 }
 
 func (sfm *simpleFeatureManager) EvaluateExpr(ctx context.Context, featureName string, cond string) (bool, error) {
-	feature, _ := sfm.Store().Find(featureName)
+	feature, err := sfm.Store().Find(featureName)
+	if err != nil {
+		return false, err
+	}
+
 	if !feature.IsEnabled {
 		return false, ErrFeatureIsNotEnabled
 	}
+
 	if cond == "" {
 		return false, ErrEmptyExpression
 	}

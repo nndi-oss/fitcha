@@ -38,7 +38,11 @@ func (m *inmemoryStore) Update(feature *Feature) error {
 }
 
 func (m *inmemoryStore) Find(featureName string) (*Feature, error) {
-	return m.features[featureName], nil
+	feature, ok := m.features[featureName]
+	if feature == nil || !ok {
+		return nil, ErrFeatureDoesNotExist
+	}
+	return feature, nil
 }
 
 func (m *inmemoryStore) Exists(featureName string) (bool, error) {
