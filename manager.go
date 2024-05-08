@@ -31,7 +31,10 @@ func (sfm *simpleFeatureManager) Store() Storage {
 }
 
 func (sfm *simpleFeatureManager) IsEnabled(ctx context.Context, featureName string) (bool, error) {
-	feature, _ := sfm.Store().Find(featureName)
+	feature, err := sfm.Store().Find(featureName)
+	if err != nil {
+		return false, err
+	}
 	if !feature.IsEnabled {
 		return false, ErrFeatureIsNotEnabled
 	}
