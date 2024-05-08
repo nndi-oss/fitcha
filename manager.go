@@ -14,6 +14,10 @@ type FeatureManager interface {
 	Enable(context.Context, string) error
 
 	Disable(context.Context, string) error
+
+	AvailableFeatures() []string
+
+	EnabledFeatures() []string
 }
 
 type simpleFeatureManager struct {
@@ -86,4 +90,22 @@ func (sfm *simpleFeatureManager) EvaluateExpr(ctx context.Context, featureName s
 		return false, ErrEmptyExpression
 	}
 	return evaluateCondition(ctx, cond)
+}
+
+func (sfm *simpleFeatureManager) AvailableFeatures() []string {
+	available := make([]string, 0)
+	for _, f := range sfm.store.List() {
+		available = append(available, string(f.Name))
+	}
+	return available
+}
+
+func (sfm *simpleFeatureManager) EnabledFeatures() []string {
+	available := make([]string, 0)
+	for _, f := range sfm.store.List() {
+		if f.IsEnabled {
+			available = append(available, string(f.Name))
+		}
+	}
+	return available
 }

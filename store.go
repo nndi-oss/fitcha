@@ -1,6 +1,8 @@
 package fitcha
 
-import "sync"
+import (
+	"sync"
+)
 
 type Storage interface {
 	Add(feature *Feature) error
@@ -10,6 +12,8 @@ type Storage interface {
 	Find(featureName string) (*Feature, error)
 
 	Exists(featureName string) (bool, error)
+
+	List() []*Feature
 }
 
 type inmemoryStore struct {
@@ -48,4 +52,11 @@ func (m *inmemoryStore) Find(featureName string) (*Feature, error) {
 func (m *inmemoryStore) Exists(featureName string) (bool, error) {
 	_, ok := m.features[featureName]
 	return ok, nil
+}
+func (m *inmemoryStore) List() []*Feature {
+	features := make([]*Feature, 0)
+	for _, f := range m.features {
+		features = append(features, f)
+	}
+	return features
 }
